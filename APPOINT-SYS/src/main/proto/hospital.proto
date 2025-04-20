@@ -1,0 +1,34 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "com.example.hospital";
+option java_outer_classname = "HospitalProto";
+
+service HospitalService {
+  rpc BookAppointment(Appointment) returns (OperationResponse);  // 预约挂号
+  rpc QueryByID(AppointmentIDRequest) returns (Appointment);     // ID查询
+  rpc QueryByPatient(PatientRequest) returns (AppointmentList);  // 患者查询
+  rpc CancelAppointment(AppointmentIDRequest) returns (OperationResponse); // 取消预约
+}
+
+// 领域对象
+message Appointment {
+  int32 id = 1;
+  string patient_name = 2;
+  string doctor_name = 3;
+  string department = 4;
+  string date = 5;        // 日期格式：YYYY-MM-DD
+  string time_slot = 6;    // 时间段如 "14:00-15:00"
+}
+
+// 请求/响应结构
+message AppointmentIDRequest { int32 id = 1; }
+message PatientRequest { string patient_name = 1; }
+
+message OperationResponse {
+  bool success = 1;
+  string message = 2;     // 操作结果描述
+}
+
+message AppointmentList {
+  repeated Appointment appointments = 1;
+}
